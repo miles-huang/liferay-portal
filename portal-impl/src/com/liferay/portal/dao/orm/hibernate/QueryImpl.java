@@ -82,6 +82,18 @@ public class QueryImpl implements Query {
 
 	@NotPrivileged
 	@Override
+	public Object iterateNext() throws ORMException {
+		Iterator<?> iterator = iterate(false);
+
+		if (iterator.hasNext()) {
+			return iterator.next();
+		}
+
+		return null;
+	}
+
+	@NotPrivileged
+	@Override
 	public List<?> list() throws ORMException {
 		return list(false, false);
 	}

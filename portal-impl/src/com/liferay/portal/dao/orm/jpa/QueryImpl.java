@@ -80,6 +80,17 @@ public class QueryImpl implements Query {
 	}
 
 	@Override
+	public Object iterateNext() throws ORMException {
+		Iterator<?> iterator = iterate(false);
+
+		if (iterator.hasNext()) {
+			return iterator.next();
+		}
+
+		return null;
+	}
+
+	@Override
 	public List<?> list() throws ORMException {
 		return list(false, false);
 	}
