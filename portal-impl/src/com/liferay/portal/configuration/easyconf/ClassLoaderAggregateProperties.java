@@ -24,6 +24,7 @@ import com.germinus.easyconf.JndiURL;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
 
 import java.net.URL;
 
