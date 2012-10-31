@@ -459,6 +459,9 @@ public class ServiceBuilder {
 			"(?m)^[ \t]*((?:package|import) .*;)\\s*^[ \t]*/\\*\\*",
 			"$1\n\n/**");
 
+		if ( newContent.length() == 0 ) {
+			System.exit(1);
+		}
 		/*
 		// Remove blank lines after try {
 
@@ -751,6 +754,10 @@ public class ServiceBuilder {
 								_createPersistenceTest(entity);
 							}
 
+							if ( entity.isHierarchicalTree() && entity.hasColumn("treeScopeId")) {
+								entity.getColumn("treeScopeId").setFinderPath(true);
+							}
+							
 							_createModelImpl(entity);
 							_createExtendedModelBaseImpl(entity);
 							_createExtendedModelImpl(entity);
