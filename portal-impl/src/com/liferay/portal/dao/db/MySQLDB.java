@@ -206,7 +206,7 @@ public class MySQLDB extends BaseDB {
 	private static final String[] _MYSQL = {
 		"##", "1", "0", "'1970-01-01'", "now()", " longblob", " longblob",
 		" tinyint", " datetime", " double", " integer", " bigint", " longtext",
-		" longtext", " varchar", "  auto_increment", "commit"
+		" longtext", " varchar", " decimal", "  auto_increment", "commit"
 	};
 
 	private static final boolean _SUPPORTS_DATE_MILLISECONDS = false;

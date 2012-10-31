@@ -278,7 +278,7 @@ if (hints != null) {
 				</aui:script>
 			</c:if>
 		</c:when>
-		<c:when test='<%= type.equals("double") || type.equals("int") || type.equals("long") || type.equals("String") %>'>
+		<c:when test='<%= type.equals("double") || type.equals("int") || type.equals("long") || type.equals("String") || type.equals("BigDecimal") %>'>
 
 			<%
 			String defaultString = GetterUtil.DEFAULT_STRING;
@@ -329,6 +329,16 @@ if (hints != null) {
 				}
 				else {
 					value = String.valueOf(longValue);
+				}
+			}
+			else if ( type.equals("BigDecimal") ) {
+				java.math.BigDecimal decimalValue = BeanParamUtil.getBigDecimal(bean, request, field, GetterUtil.getBigDecimal(defaultString));
+				
+				if ( format != null ) {
+					value = format.format(decimalValue);
+				}
+				else {
+					value = String.valueOf(decimalValue);
 				}
 			}
 			else {

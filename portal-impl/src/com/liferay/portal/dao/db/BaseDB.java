@@ -1063,7 +1063,8 @@ public abstract class BaseDB implements DB {
 	protected static final String[] TEMPLATE = {
 		"##", "TRUE", "FALSE", "'01/01/1970'", "CURRENT_TIMESTAMP", " BLOB",
 		" SBLOB", " BOOLEAN", " DATE", " DOUBLE", " INTEGER", " LONG",
-		" STRING", " TEXT", " VARCHAR", " IDENTITY", "COMMIT_TRANSACTION"
+		" STRING", " TEXT", " VARCHAR", " DECIMAL", " IDENTITY",
+		"COMMIT_TRANSACTION"
 	};
 
 	private static final boolean _SUPPORTS_ALTER_COLUMN_NAME = true;
