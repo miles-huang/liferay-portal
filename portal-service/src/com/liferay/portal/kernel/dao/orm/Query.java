@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.dao.orm;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import java.sql.Timestamp;
 
@@ -48,6 +49,10 @@ public interface Query {
 
 	public ScrollableResults scroll() throws ORMException;
 
+	public Query setBigDecimal(int pos, BigDecimal value);
+
+	public Query setBigDecimal(String name, BigDecimal value);
+	
 	public Query setBoolean(int pos, boolean value);
 
 	public Query setBoolean(String name, boolean value);
