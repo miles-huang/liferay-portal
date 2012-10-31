@@ -22,6 +22,8 @@ import java.io.Serializable;
 
 import java.sql.Blob;
 
+import java.math.BigDecimal;
+
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;

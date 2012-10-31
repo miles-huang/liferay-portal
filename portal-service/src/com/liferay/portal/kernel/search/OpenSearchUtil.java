@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.xml.Namespace;
 import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 
+import java.math.BigDecimal;
 import java.text.Format;
 
 import java.util.Date;
@@ -45,6 +46,12 @@ public class OpenSearchUtil {
 		Element el, String name, int namespaceType) {
 
 		return el.addElement(getQName(name, namespaceType));
+	}
+
+	public static Element addElement(
+		Element el, String name, int namespaceType, BigDecimal value) {
+
+		return addElement(el, name, namespaceType, String.valueOf(value));
 	}
 
 	public static Element addElement(

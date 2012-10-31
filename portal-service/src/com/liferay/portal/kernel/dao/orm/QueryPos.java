@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.dao.orm;
 
 import com.liferay.portal.kernel.util.CalendarUtil;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import java.util.Date;
@@ -28,6 +29,27 @@ public class QueryPos {
 
 	public static QueryPos getInstance(Query query) {
 		return new QueryPos(query);
+	}
+
+	public void add(BigDecimal value) {
+		if ( value != null ) {
+			_query.setBigDecimal(_pos++, value);
+		}
+		else {
+			_addNull();
+		}
+	}
+
+	public void add(BigDecimal[] values) {
+		add(values, _DEFAULT_ARRAY_COUNT);
+	}
+
+	public void add(BigDecimal[] values, int count) {
+		for (int i = 0; i < values.length; i++) {
+			for (int j = 0; j < count; j++) {
+				add(values[i]);
+			}
+		}
 	}
 
 	public void add(boolean value) {
@@ -240,7 +262,10 @@ public class QueryPos {
 
 		Class<?> clazz = obj.getClass();
 
-		if (clazz == Boolean.class) {
+		if (BigDecimal.class.isAssignableFrom(clazz)) {
+			add(((BigDecimal)obj));
+		}
+		else if (clazz == Boolean.class) {
 			add(((Boolean)obj).booleanValue());
 		}
 		else if (clazz == Date.class) {

@@ -14,6 +14,8 @@
 
 package com.liferay.portal.bean;
 
+import java.math.BigDecimal;
+
 import com.liferay.portal.kernel.bean.BeanProperties;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -75,6 +77,30 @@ public class BeanPropertiesImpl implements BeanProperties {
 		catch (Exception e) {
 			_log.error(e, e);
 		}
+	}
+
+	@Override
+	public BigDecimal getBigDecimal(Object bean, String param) {
+		return getBigDecimal(bean, param, GetterUtil.DEFAULT_BIG_DECIMAL);
+	}
+
+	@Override
+	public BigDecimal getBigDecimal(Object bean, String param,
+			BigDecimal defaultValue) {
+		BigDecimal beanValue = defaultValue;
+
+		if (bean != null) {
+			try {
+				Object value = BeanUtil.getProperty(bean, param);
+
+				beanValue = Convert.toBigDecimal(value, defaultValue);
+			}
+			catch (Exception e) {
+				_log.error(e, e);
+			}
+		}
+
+		return beanValue;
 	}
 
 	@Override

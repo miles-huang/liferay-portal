@@ -18,6 +18,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import java.text.DateFormat;
 
@@ -34,6 +35,12 @@ import javax.servlet.http.HttpServletRequest;
  * @author Raymond Augé
  */
 public class ParamUtil {
+
+	public static BigDecimal get(
+		HttpServletRequest request, String param, BigDecimal defaultValue) {
+
+		return GetterUtil.get(request.getParameter(param), defaultValue);
+	}
 
 	public static boolean get(
 		HttpServletRequest request, String param, boolean defaultValue) {
@@ -96,6 +103,12 @@ public class ParamUtil {
 		}
 
 		return null;
+	}
+
+	public static BigDecimal get(
+		PortletRequest portletRequest, String param, BigDecimal defaultValue) {
+
+		return GetterUtil.get(portletRequest.getParameter(param), defaultValue);
 	}
 
 	public static boolean get(
@@ -161,6 +174,12 @@ public class ParamUtil {
 		return null;
 	}
 
+	public static BigDecimal get(
+		ServiceContext serviceContext, String param, BigDecimal defaultValue) {
+
+		return GetterUtil.get(serviceContext.getAttribute(param), defaultValue);
+	}
+	
 	public static boolean get(
 		ServiceContext serviceContext, String param, boolean defaultValue) {
 
@@ -222,6 +241,79 @@ public class ParamUtil {
 		}
 
 		return null;
+	}
+
+	public static BigDecimal getBigDecimal(HttpServletRequest request, String param) {
+		return GetterUtil.getBigDecimal(request.getParameter(param));
+	}
+
+	public static BigDecimal getBigDecimal(
+		HttpServletRequest request, String param, BigDecimal defaultValue) {
+
+		return get(request, param, defaultValue);
+	}
+
+	public static BigDecimal getBigDecimal(
+		PortletRequest portletRequest, String param) {
+
+		return GetterUtil.getBigDecimal(portletRequest.getParameter(param));
+	}
+
+	public static BigDecimal getBigDecimal(
+		PortletRequest portletRequest, String param, BigDecimal defaultValue) {
+
+		return get(portletRequest, param, defaultValue);
+	}
+
+	public static BigDecimal getBigDecimal(
+		ServiceContext serviceContext, String param) {
+
+		return GetterUtil.getBigDecimal(serviceContext.getAttribute(param));
+	}
+
+	public static BigDecimal getBigDecimal(
+		ServiceContext serviceContext, String param, BigDecimal defaultValue) {
+
+		return get(serviceContext, param, defaultValue);
+	}
+
+	public static BigDecimal[] getBigDecimalValues(
+		HttpServletRequest request, String param) {
+
+		return getBigDecimalValues(request, param, new BigDecimal[0]);
+	}
+
+	public static BigDecimal[] getBigDecimalValues(
+		HttpServletRequest request, String param, BigDecimal[] defaultValue) {
+
+		return GetterUtil.getBigDecimalValues(
+			request.getParameterValues(param), defaultValue);
+	}
+	
+	public static BigDecimal[] getBigDecimalValues(
+		PortletRequest portletRequest, String param) {
+
+		return getBigDecimalValues(portletRequest, param, new BigDecimal[0]);
+	}
+
+	public static BigDecimal[] getBigDecimalValues(
+		PortletRequest portletRequest, String param, BigDecimal[] defaultValue) {
+
+		return GetterUtil.getBigDecimalValues(
+				portletRequest.getParameterValues(param), defaultValue);
+	}
+
+	public static BigDecimal[] getBigDecimalValues(
+		ServiceContext serviceContext, String param) {
+
+		return getBigDecimalValues(serviceContext, param, new BigDecimal[0]);
+	}
+
+	public static BigDecimal[] getBigDecimalValues(
+		ServiceContext serviceContext, String param, BigDecimal[] defaultValue) {
+
+		return GetterUtil.getBigDecimalValues(
+			serviceContext.getAttribute(param), defaultValue);
 	}
 
 	public static boolean getBoolean(HttpServletRequest request, String param) {

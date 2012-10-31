@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.service.persistence.BasePersistence;
 
 import java.util.Date;
+import java.math.BigDecimal;
 
 /**
  * The persistence interface for the ${entity.humanName} service.

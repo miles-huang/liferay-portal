@@ -62,6 +62,8 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import java.io.Serializable;
 
+import java.math.BigDecimal;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
