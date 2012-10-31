@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import java.sql.Timestamp;
 
@@ -132,6 +133,20 @@ public class QueryImpl implements Query {
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
 		}
+	}
+
+	@Override
+	public Query setBigDecimal(int pos, BigDecimal value) {
+		positionalParameterMap.put(pos, value);
+
+		return this;
+	}
+
+	@Override
+	public Query setBigDecimal(String name, BigDecimal value) {
+		namedParameterMap.put(name, value);
+
+		return this;
 	}
 
 	@Override

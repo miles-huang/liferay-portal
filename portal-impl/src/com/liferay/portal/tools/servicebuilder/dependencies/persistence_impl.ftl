@@ -67,6 +67,8 @@ import com.liferay.portal.service.persistence.impl.TableMapperFactory;
 
 import java.io.Serializable;
 
+import java.math.BigDecimal;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
