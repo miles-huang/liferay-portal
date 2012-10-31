@@ -42,8 +42,9 @@ for GPG setup instructions.
 		</antcall>
 
 		<ant dir="${tstamp.value}" target="deploy" inheritall="false" />
-
+<!--
 		<delete dir="${tstamp.value}" />
+-->
 	</target>
 
 	<target name="deploy-release-artifacts">
@@ -74,8 +75,9 @@ for GPG setup instructions.
 		</antcall>
 
 		<ant dir="${tstamp.value}" target="install" inheritall="false" />
-
+<!--
 		<delete dir="${tstamp.value}" />
+-->
 	</target>
 
 	<target name="install-release-artifacts">
@@ -129,8 +131,9 @@ Run "ant -f build-dist.xml all zip-portal-war" to generate that file.
 				</fail>
 			</then>
 		</if>
-
+<!--
 		<antcall target="jar-javadoc" />
+-->
 		<antcall target="jar-sources" />
 
 		<ant dir="util-taglib" target="taglibdoc" inheritAll="false" />
@@ -265,7 +268,8 @@ Run "ant -f build-dist.xml all zip-portal-war" to generate that file.
 				prefix="liferay-portal-maven-${lp.version}"
 			/>
 		</zip>
-
+<!--
 		<delete dir="${tstamp.value}" />
+-->
 	</target>
 </project>
