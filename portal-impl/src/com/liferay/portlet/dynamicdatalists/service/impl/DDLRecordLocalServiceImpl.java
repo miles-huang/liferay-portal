@@ -19,6 +19,10 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.search.Hits;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -180,6 +184,13 @@ public class DDLRecordLocalServiceImpl extends DDLRecordLocalServiceBaseImpl {
 				_log.debug(nsde.getMessage());
 			}
 		}
+
+		// Indexer
+
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			DDLRecord.class);
+
+		indexer.delete(record);
 	}
 
 	@Override
@@ -209,6 +220,48 @@ public class DDLRecordLocalServiceImpl extends DDLRecordLocalServiceBaseImpl {
 	}
 
 	@Override
+	public List<DDLRecord> getCompanyRecords(
+			long companyId, int status, int scope, int start, int end,
+			OrderByComparator orderByComparator)
+		throws SystemException {
+
+		return ddlRecordFinder.findByC_S_S(
+			companyId, status, scope, start, end, orderByComparator);
+	}
+
+	/**
+	 * @deprecated {@link #getCompanyRecords(long, int, int, int, int, OrderByComparator)}
+	 */
+	@Override
+	public List<DDLRecord> getCompanyRecords(
+			long companyId, int scope, int start, int end,
+			OrderByComparator orderByComparator)
+		throws SystemException {
+
+		return getCompanyRecords(
+			companyId, WorkflowConstants.STATUS_ANY, scope, start, end,
+			orderByComparator);
+	}
+
+	/**
+	 * @deprecated {@link #getCompanyRecordsCount(long, int, int)}
+	 */
+	@Override
+	public int getCompanyRecordsCount(long companyId, int scope)
+		throws SystemException {
+
+		return getCompanyRecordsCount(
+			companyId, WorkflowConstants.STATUS_ANY, scope);
+	}
+
+	@Override
+	public int getCompanyRecordsCount(long companyId, int status, int scope)
+		throws SystemException {
+
+		return ddlRecordFinder.countByC_S_S(companyId, status, scope);
+	}
+
+	@Override
 	public DDLRecordVersion getLatestRecordVersion(long recordId)
 		throws PortalException, SystemException {
 
@@ -226,6 +279,24 @@ public class DDLRecordLocalServiceImpl extends DDLRecordLocalServiceBaseImpl {
 			recordVersions, new DDLRecordVersionVersionComparator());
 
 		return recordVersions.get(0);
+	}
+
+	@Override
+	public Long[] getMinAndMaxCompanyRecordIds(
+			long companyId, int status, int scope)
+		throws SystemException {
+
+		return ddlRecordFinder.findByC_S_S_MinAndMax(companyId, status, scope);
+	}
+
+	@Override
+	public List<DDLRecord> getMinAndMaxCompanyRecords(
+			long companyId, int status, int scope, long minRecordId,
+			long maxRecordId)
+		throws SystemException {
+
+		return ddlRecordFinder.findByC_S_S_MinAndMax(
+			companyId, status, scope, minRecordId, maxRecordId);
 	}
 
 	@Override
@@ -311,6 +382,19 @@ public class DDLRecordLocalServiceImpl extends DDLRecordLocalServiceBaseImpl {
 		updateRecord(
 			userId, recordId, true, recordVersion.getDisplayIndex(), fields,
 			false, serviceContext);
+	}
+
+	@Override
+	public Hits search(SearchContext searchContext) throws SystemException {
+		try {
+			Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+				DDLRecord.class);
+
+			return indexer.search(searchContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
 	}
 
 	@Override
@@ -501,6 +585,26 @@ public class DDLRecordLocalServiceImpl extends DDLRecordLocalServiceBaseImpl {
 
 				ddlRecordPersistence.update(record, false);
 			}
+
+			// Indexer
+
+			if (recordVersion.getVersion().equals(
+					DDLRecordConstants.VERSION_DEFAULT)) {
+
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+					DDLRecord.class);
+
+				indexer.delete(record);
+			}
+		}
+
+		// Indexer
+
+		if (status == WorkflowConstants.STATUS_APPROVED) {
+			Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+				DDLRecord.class);
+
+			indexer.reindex(record);
 		}
 
 		return record;

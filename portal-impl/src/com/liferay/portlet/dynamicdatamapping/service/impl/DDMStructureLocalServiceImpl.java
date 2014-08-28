@@ -379,6 +379,13 @@ public class DDMStructureLocalServiceImpl
 	}
 
 	@Override
+	public List<DDMStructure> getStructures(long[] groupIds)
+		throws SystemException {
+
+		return ddmStructurePersistence.findByGroupIds(groupIds);
+	}
+
+	@Override
 	public int getStructuresCount(long groupId) throws SystemException {
 		return ddmStructurePersistence.countByGroupId(groupId);
 	}

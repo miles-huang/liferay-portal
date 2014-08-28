@@ -146,11 +146,13 @@ public class DDLRecordSetFinderImpl extends BasePersistenceImpl<DDLRecordSet>
 			String sql = CustomSQLUtil.get(COUNT_BY_C_G_N_D_S);
 
 			if (groupId <= 0) {
-				sql = StringUtil.replace(sql, "(groupId = ?) AND", "");
+				sql = StringUtil.replace(
+					sql, "(groupId = ?) AND", StringPool.BLANK);
 			}
 
 			if (scope == DDLRecordSetConstants.SCOPE_ANY) {
-				sql = StringUtil.replace(sql, "(scope = ?) AND", "");
+				sql = StringUtil.replace(
+					sql, "(scope = ?) AND", StringPool.BLANK);
 			}
 
 			sql = CustomSQLUtil.replaceKeywords(
@@ -215,11 +217,13 @@ public class DDLRecordSetFinderImpl extends BasePersistenceImpl<DDLRecordSet>
 			String sql = CustomSQLUtil.get(FIND_BY_C_G_N_D_S);
 
 			if (groupId <= 0) {
-				sql = StringUtil.replace(sql, "(groupId = ?) AND", "");
+				sql = StringUtil.replace(
+					sql, "(groupId = ?) AND", StringPool.BLANK);
 			}
 
 			if (scope == DDLRecordSetConstants.SCOPE_ANY) {
-				sql = StringUtil.replace(sql, "(scope = ?) AND", "");
+				sql = StringUtil.replace(
+					sql, "(scope = ?) AND", StringPool.BLANK);
 			}
 
 			sql = CustomSQLUtil.replaceKeywords(

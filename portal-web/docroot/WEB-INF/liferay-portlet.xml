@@ -1725,6 +1725,7 @@
 		<portlet-name>167</portlet-name>
 		<icon>/html/icons/dynamic_data_lists.png</icon>
 		<struts-path>dynamic_data_lists</struts-path>
+		<indexer-class>com.liferay.portlet.dynamicdatalists.util.DDLIndexer</indexer-class>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
 		<portlet-data-handler-class>com.liferay.portlet.dynamicdatalists.lar.DDLPortletDataHandlerImpl</portlet-data-handler-class>
 		<control-panel-entry-category>content</control-panel-entry-category>
