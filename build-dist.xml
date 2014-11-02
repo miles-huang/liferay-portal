@@ -708,18 +708,6 @@ app.server.jboss.zip.name=jboss-eap-$${app.server.jboss.version}.zip</echo>
 			</then>
 		</if>
 
-		<exec dir="${project.dir}" executable="cmd.exe" os="${os.windows}">
-			<arg line="/c svn --username ${svn.username} --password ${svn.password} update -r ${svn.revision}" />
-		</exec>
-
-		<exec dir="${lp.source.dir}" executable="cmd.exe" os="${os.windows}">
-			<arg line="/c svn --username ${svn.username} --password ${svn.password} update -r ${svn.revision}" />
-		</exec>
-
-		<exec dir="${lp.plugins.dir}" executable="cmd.exe" os="${os.windows}">
-			<arg line="/c svn --username ${svn.username} --password ${svn.password} update -r ${svn.revision}" />
-		</exec>
-
 		<antcall target="all" />
 
 		<delete dir="${lp.plugins.dir}/dist" />
@@ -727,9 +715,9 @@ app.server.jboss.zip.name=jboss-eap-$${app.server.jboss.version}.zip</echo>
 		<delete dir="${liferay.home}/data" />
 		<delete dir="${liferay.home}/deploy" />
 		<delete dir="${liferay.home}/logs" />
-
+<!--
 		<antcall target="doc" />
-
+-->
 		<delete dir="dist" />
 		<mkdir dir="dist" />
 
@@ -742,7 +730,7 @@ app.server.jboss.zip.name=jboss-eap-$${app.server.jboss.version}.zip</echo>
 		<antcall target="zip-portal-war" />
 
 		<antcall target="build-dist-plugins" />
-
+<!--
 		<antcall target="build-dist-geronimo" />
 		<antcall target="build-dist-glassfish" />
 		<antcall target="build-dist-jboss" />
@@ -750,8 +738,10 @@ app.server.jboss.zip.name=jboss-eap-$${app.server.jboss.version}.zip</echo>
 		<antcall target="build-dist-jonas" />
 		<antcall target="build-dist-resin" />
 		<antcall target="build-dist-tcat" />
+-->
 		<antcall target="build-dist-tomcat" />
 
+<!--
 		<antcall target="zip-api" />
 		<antcall target="zip-geronimo" />
 		<antcall target="zip-glassfish" />
@@ -759,28 +749,34 @@ app.server.jboss.zip.name=jboss-eap-$${app.server.jboss.version}.zip</echo>
 		<antcall target="zip-jetty" />
 		<antcall target="zip-jonas" />
 		<antcall target="zip-patching-tool" />
+-->
 		<antcall target="zip-portal-client" />
 		<antcall target="zip-portal-dependencies" />
+<!--
 		<antcall target="zip-resin" />
+-->
 		<antcall target="zip-sql" />
+<!--
 		<antcall target="zip-src" />
 		<antcall target="zip-tcat" />
+-->
 		<antcall target="zip-tomcat" />
-
+<!--
 		<ant antfile="build-maven.xml" target="zip-maven" inheritAll="false" />
-
+-->
 		<!--<antcall target="build-dist-sql-oracle" />-->
 
 		<ant dir="${lp.plugins.dir}" target="extract-plugins-sdk" inheritAll="false" />
 
 		<move file="${lp.plugins.dir}/dist/liferay-plugins-sdk-${lp.version}.zip" tofile="dist/liferay-plugins-sdk-${lp.version}.zip" />
-
+<!--
 		<antcall target="update-plugins-includes">
 			<param name="plugins.includes.marketplace.required" value="true" />
 		</antcall>
 
 		<ant dir="${lp.plugins.dir}" target="all" inheritAll="false" />
-
+-->
+<!--
 		<if>
 			<isset property="dist.username" />
 			<then>
@@ -789,6 +785,7 @@ app.server.jboss.zip.name=jboss-eap-$${app.server.jboss.version}.zip</echo>
 				</scp>
 			</then>
 		</if>
+-->
 
 		<echo>Manually run "ant -buildfile build-maven.xml deploy-release-artifacts" if the
 release was successful.</echo>
