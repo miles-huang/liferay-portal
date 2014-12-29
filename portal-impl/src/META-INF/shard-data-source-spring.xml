@@ -39,6 +39,76 @@
 			</bean>
 		</property>
 	</bean>
+	<bean id="shardDataSource3" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.three." />
+			</bean>
+		</property>
+	</bean>
+	<bean id="shardDataSource4" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.four." />
+			</bean>
+		</property>
+	</bean>
+	<bean id="shardDataSource5" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.five." />
+			</bean>
+		</property>
+	</bean>
+	<bean id="shardDataSource6" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.six." />
+			</bean>
+		</property>
+	</bean>
+	<bean id="shardDataSource7" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.seven." />
+			</bean>
+		</property>
+	</bean>
+	<bean id="shardDataSource8" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.eight." />
+			</bean>
+		</property>
+	</bean>
+	<bean id="shardDataSource9" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.nine." />
+			</bean>
+		</property>
+	</bean>
+	<bean id="shardDataSource10" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.ten." />
+			</bean>
+		</property>
+	</bean>
+	<bean id="shardDataSource11" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.eleven." />
+			</bean>
+		</property>
+	</bean>
+	<bean id="shardDataSource12" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<bean class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+				<property name="propertyPrefix" value="jdbc.twelve." />
+			</bean>
+		</property>
+	</bean>
 	<bean id="shardDataSourceTargetSource" class="com.liferay.portal.dao.shard.ShardDataSourceTargetSource">
 		<property name="dataSources">
 			<map>
@@ -59,6 +129,66 @@
 						<value>two</value>
 					</key>
 					<ref bean="shardDataSource2" />
+				</entry>
+				<entry>
+					<key>
+						<value>three</value>
+					</key>
+					<ref bean="shardDataSource3" />
+				</entry>
+				<entry>
+					<key>
+						<value>four</value>
+					</key>
+					<ref bean="shardDataSource4" />
+				</entry>
+				<entry>
+					<key>
+						<value>five</value>
+					</key>
+					<ref bean="shardDataSource5" />
+				</entry>
+				<entry>
+					<key>
+						<value>six</value>
+					</key>
+					<ref bean="shardDataSource6" />
+				</entry>
+				<entry>
+					<key>
+						<value>seven</value>
+					</key>
+					<ref bean="shardDataSource7" />
+				</entry>
+				<entry>
+					<key>
+						<value>eight</value>
+					</key>
+					<ref bean="shardDataSource8" />
+				</entry>
+				<entry>
+					<key>
+						<value>nine</value>
+					</key>
+					<ref bean="shardDataSource9" />
+				</entry>
+				<entry>
+					<key>
+						<value>ten</value>
+					</key>
+					<ref bean="shardDataSource10" />
+				</entry>
+				<entry>
+					<key>
+						<value>eleven</value>
+					</key>
+					<ref bean="shardDataSource11" />
+				</entry>
+				<entry>
+					<key>
+						<value>twelve</value>
+					</key>
+					<ref bean="shardDataSource12" />
 				</entry>
 			</map>
 		</property>
