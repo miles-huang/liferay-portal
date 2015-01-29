@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Writer;
+import java.math.BigDecimal;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -81,6 +82,18 @@ public class JSONObjectImpl implements JSONObject {
 	}
 
 	@Override
+	public BigDecimal getBigDecimal(String key) {
+		return new BigDecimal(_jsonObject.optDouble(key));
+	}
+
+	public BigDecimal getBigDecimal(String key, BigDecimal defaultValue) {
+		double ret = _jsonObject.optDouble(key);
+		if ( ret == Double.NaN ) {
+			return defaultValue;
+		}
+		return new BigDecimal(ret);
+	}
+
 	public boolean getBoolean(String key) {
 		return _jsonObject.optBoolean(key);
 	}
@@ -237,6 +250,20 @@ public class JSONObjectImpl implements JSONObject {
 		return this;
 	}
 
+	@Override
+	public JSONObject put(String key, BigDecimal value) {
+		try {
+			_jsonObject.put(key, value.doubleValue());
+		}
+		catch (Exception e) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(e, e);
+			}
+		}
+
+		return this;
+	}
+	
 	@Override
 	public JSONObject put(String key, JSONArray value) {
 		try {
