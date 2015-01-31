@@ -217,4 +217,6 @@ public interface ClassNamePersistence extends BasePersistence<ClassName> {
 	*/
 	public int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery();
 }

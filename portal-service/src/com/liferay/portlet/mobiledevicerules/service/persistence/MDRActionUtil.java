@@ -841,6 +841,10 @@ public class MDRActionUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static MDRActionPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (MDRActionPersistence)PortalBeanLocatorUtil.locate(MDRActionPersistence.class.getName());

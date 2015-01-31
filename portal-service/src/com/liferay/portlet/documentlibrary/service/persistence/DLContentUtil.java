@@ -923,6 +923,10 @@ public class DLContentUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static DLContentPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (DLContentPersistence)PortalBeanLocatorUtil.locate(DLContentPersistence.class.getName());

@@ -947,4 +947,6 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 	*/
 	public int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery();
 }

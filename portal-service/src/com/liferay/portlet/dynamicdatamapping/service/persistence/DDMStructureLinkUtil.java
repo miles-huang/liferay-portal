@@ -661,6 +661,10 @@ public class DDMStructureLinkUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static DDMStructureLinkPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (DDMStructureLinkPersistence)PortalBeanLocatorUtil.locate(DDMStructureLinkPersistence.class.getName());

@@ -670,6 +670,10 @@ public class LayoutSetUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static LayoutSetPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (LayoutSetPersistence)PortalBeanLocatorUtil.locate(LayoutSetPersistence.class.getName());

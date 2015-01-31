@@ -300,4 +300,6 @@ public interface PasswordTrackerPersistence extends BasePersistence<PasswordTrac
 	*/
 	public int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery();
 }

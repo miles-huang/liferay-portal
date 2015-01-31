@@ -2798,6 +2798,10 @@ public class DDMStructureUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	/**
 	* Returns all the document library file entry types associated with the d d m structure.
 	*

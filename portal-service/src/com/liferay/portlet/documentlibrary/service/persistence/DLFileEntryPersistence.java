@@ -2757,4 +2757,6 @@ public interface DLFileEntryPersistence extends BasePersistence<DLFileEntry> {
 	*/
 	public int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery();
 }

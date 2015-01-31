@@ -425,6 +425,10 @@ public class ShoppingOrderItemUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static ShoppingOrderItemPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (ShoppingOrderItemPersistence)PortalBeanLocatorUtil.locate(ShoppingOrderItemPersistence.class.getName());

@@ -806,6 +806,8 @@ public interface SCProductEntryPersistence extends BasePersistence<SCProductEntr
 	public int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery();
+
 	/**
 	* Returns all the s c licenses associated with the s c product entry.
 	*

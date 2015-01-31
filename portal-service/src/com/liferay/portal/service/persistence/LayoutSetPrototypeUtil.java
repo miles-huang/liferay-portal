@@ -1295,6 +1295,10 @@ public class LayoutSetPrototypeUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static LayoutSetPrototypePersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (LayoutSetPrototypePersistence)PortalBeanLocatorUtil.locate(LayoutSetPrototypePersistence.class.getName());

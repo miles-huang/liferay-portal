@@ -908,6 +908,8 @@ public interface DLFileEntryTypePersistence extends BasePersistence<DLFileEntryT
 	public int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery();
+
 	/**
 	* Returns all the document library folders associated with the document library file entry type.
 	*

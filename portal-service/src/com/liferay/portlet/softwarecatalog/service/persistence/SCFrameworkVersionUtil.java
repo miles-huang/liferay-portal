@@ -943,6 +943,10 @@ public class SCFrameworkVersionUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	/**
 	* Returns all the s c product versions associated with the s c framework version.
 	*

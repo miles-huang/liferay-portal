@@ -741,6 +741,8 @@ public interface SCFrameworkVersionPersistence extends BasePersistence<SCFramewo
 	public int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery();
+
 	/**
 	* Returns all the s c product versions associated with the s c framework version.
 	*

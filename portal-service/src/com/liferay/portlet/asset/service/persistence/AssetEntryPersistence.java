@@ -980,6 +980,8 @@ public interface AssetEntryPersistence extends BasePersistence<AssetEntry> {
 	public int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery();
+
 	/**
 	* Returns all the asset categories associated with the asset entry.
 	*

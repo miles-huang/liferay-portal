@@ -301,4 +301,6 @@ public interface UserTrackerPathPersistence extends BasePersistence<UserTrackerP
 	*/
 	public int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery();
 }

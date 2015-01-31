@@ -1000,6 +1000,10 @@ public class DLFileEntryMetadataUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static DLFileEntryMetadataPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (DLFileEntryMetadataPersistence)PortalBeanLocatorUtil.locate(DLFileEntryMetadataPersistence.class.getName());

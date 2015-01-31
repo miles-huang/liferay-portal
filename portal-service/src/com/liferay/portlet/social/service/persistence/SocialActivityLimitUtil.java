@@ -871,6 +871,10 @@ public class SocialActivityLimitUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static SocialActivityLimitPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (SocialActivityLimitPersistence)PortalBeanLocatorUtil.locate(SocialActivityLimitPersistence.class.getName());

@@ -528,6 +528,10 @@ public class UserNotificationDeliveryUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static UserNotificationDeliveryPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (UserNotificationDeliveryPersistence)PortalBeanLocatorUtil.locate(UserNotificationDeliveryPersistence.class.getName());

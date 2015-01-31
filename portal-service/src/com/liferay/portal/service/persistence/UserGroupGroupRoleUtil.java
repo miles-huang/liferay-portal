@@ -1105,6 +1105,10 @@ public class UserGroupGroupRoleUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static UserGroupGroupRolePersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (UserGroupGroupRolePersistence)PortalBeanLocatorUtil.locate(UserGroupGroupRolePersistence.class.getName());

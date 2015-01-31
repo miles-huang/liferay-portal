@@ -777,6 +777,10 @@ public class SCLicenseUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	/**
 	* Returns all the s c product entries associated with the s c license.
 	*

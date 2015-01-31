@@ -1698,6 +1698,10 @@ public class LayoutFriendlyURLUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	public static LayoutFriendlyURLPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (LayoutFriendlyURLPersistence)PortalBeanLocatorUtil.locate(LayoutFriendlyURLPersistence.class.getName());

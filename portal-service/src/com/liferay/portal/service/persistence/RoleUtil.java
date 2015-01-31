@@ -2575,6 +2575,10 @@ public class RoleUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	/**
 	* Returns all the groups associated with the role.
 	*
