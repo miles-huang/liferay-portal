@@ -3379,6 +3379,10 @@ public class AssetCategoryUtil {
 		return getPersistence().countAll();
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery createDynamicQuery() {
+		return getPersistence().createDynamicQuery();
+	}
+
 	/**
 	* Returns all the asset entries associated with the asset category.
 	*
@@ -3622,6 +3626,76 @@ public class AssetCategoryUtil {
 
 	public static void setRebuildTreeEnabled(boolean rebuildTreeEnabled) {
 		getPersistence().setRebuildTreeEnabled(rebuildTreeEnabled);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery getDescendantsQuery(
+		long categoryId, boolean containsSelf,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .getDescendantsQuery(categoryId, containsSelf, obc);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery getDescendantIdsQuery(
+		long categoryId, boolean containsSelf,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .getDescendantIdsQuery(categoryId, containsSelf, obc);
+	}
+
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findDescendants(
+		long categoryId, boolean containsSelf)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findDescendants(categoryId, containsSelf);
+	}
+
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findDescendants(
+		long categoryId, boolean containsSelf, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findDescendants(categoryId, containsSelf, start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findDescendants(
+		long categoryId, boolean containsSelf, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findDescendants(categoryId, containsSelf, start, end, obc);
+	}
+
+	public static java.util.List<java.lang.Long> findDescendantIds(
+		long categoryId, boolean containsSelf)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findDescendantIds(categoryId, containsSelf);
+	}
+
+	public static java.util.List<java.lang.Long> findDescendantIds(
+		long categoryId, boolean containsSelf,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findDescendantIds(categoryId, containsSelf, obc);
+	}
+
+	public static int countDescendants(long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().countDescendants(categoryId);
+	}
+
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findAncestors(
+		long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findAncestors(categoryId);
 	}
 
 	public static AssetCategoryPersistence getPersistence() {
