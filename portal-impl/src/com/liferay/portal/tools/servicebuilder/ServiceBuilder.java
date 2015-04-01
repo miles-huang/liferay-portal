@@ -1253,7 +1253,6 @@ public class ServiceBuilder {
 		else if (colType.equals("Short")) {
 			return ".shortValue()";
 		}
-
 		return StringPool.BLANK;
 	}
 
@@ -1349,6 +1348,9 @@ public class ServiceBuilder {
 		else if (type.equals("Date")) {
 			return "TIMESTAMP";
 		}
+		else if (type.equals("BigDecimal")) {
+			return "DECIMAL";
+		}
 		else {
 			return null;
 		}
@@ -1391,6 +1393,9 @@ public class ServiceBuilder {
 			}
 
 			return "VARCHAR";
+		}
+		else if (type.equals("BigDecimal")) {
+			return "DECIMAL";
 		}
 		else {
 			return null;
@@ -4222,6 +4227,17 @@ public class ServiceBuilder {
 				else if (colType.equals("Date")) {
 					sb.append("DATE");
 				}
+				else if (colType.equals("BigDecimal")) {
+					Map<String, String> hints = ModelHintsUtil.getHints(
+							_packagePath + ".model." + entity.getName(), colName);
+					int precision = 12;
+					int scale = 2;
+					if (hints != null) {
+						precision = GetterUtil.getInteger(hints.get("precision"),precision);
+						scale = GetterUtil.getInteger(hints.get("scale"),scale);
+					}
+					sb.append("DECIMAL(").append(precision).append(',').append(scale).append(')');
+				}
 				else {
 					sb.append("invalid");
 				}
@@ -4229,7 +4245,8 @@ public class ServiceBuilder {
 				if (col.isPrimary()) {
 					sb.append(" not null");
 				}
-				else if (colType.equals("Date") || colType.equals("String")) {
+				else if (colType.equals("Date") || colType.equals("String")
+						|| colType.equals("BigDecimal")) {
 					sb.append(" null");
 				}
 
@@ -4338,7 +4355,20 @@ public class ServiceBuilder {
 					sb.append("TEXT");
 				}
 			}
-			else {
+			else if (colType.equals("BigDecimal")) {
+				String model = _packagePath + ".model." + entity.getName();
+				Map<String, String> hints = ModelHintsUtil.getHints(
+						model, colName);
+				int precision = 12;
+				int scale = 2;
+				if (hints != null) {
+					precision = GetterUtil.getInteger(
+						hints.get("precision"), precision);
+					scale = GetterUtil.getInteger(
+							hints.get("scale"), scale);
+				}
+				sb.append("DECIMAL(").append(precision).append(',').append(scale).append(')');
+			} else {
 				sb.append("invalid");
 			}
 
@@ -4349,7 +4379,8 @@ public class ServiceBuilder {
 					sb.append(" primary key");
 				}
 			}
-			else if (colType.equals("Date") || colType.equals("String")) {
+			else if (colType.equals("Date") || colType.equals("String")
+					|| colType.equals("BigDecimal")) {
 				sb.append(" null");
 			}
 

@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.bean;
 
+import java.math.BigDecimal;
+
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
@@ -26,6 +28,21 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class BeanParamUtil {
 
+	public static BigDecimal getBigDecimal(
+		Object bean, HttpServletRequest request, String param ) {
+
+		return getBigDecimal(bean, request, param, GetterUtil.DEFAULT_BIG_DECIMAL);
+	}
+			
+	public static BigDecimal getBigDecimal(
+		Object bean, HttpServletRequest request, String param,
+		BigDecimal defaultValue) {
+
+		defaultValue = BeanPropertiesUtil.getBigDecimal(bean, param, defaultValue);
+
+		return ParamUtil.get(request, param, defaultValue);	
+	}
+			
 	public static boolean getBoolean(
 		Object bean, HttpServletRequest request, String param) {
 
