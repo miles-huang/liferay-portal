@@ -32,6 +32,8 @@ import java.io.Serializable;
 
 import java.lang.reflect.Method;
 
+import java.math.BigDecimal;
+
 import java.sql.Blob;
 
 import java.util.Date;

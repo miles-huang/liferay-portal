@@ -49,6 +49,8 @@ import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 
 import java.io.Serializable;
 
+import java.math.BigDecimal;
+
 import java.sql.Blob;
 import java.sql.Types;
 

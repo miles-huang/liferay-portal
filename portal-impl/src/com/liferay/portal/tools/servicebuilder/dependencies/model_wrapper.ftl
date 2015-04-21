@@ -7,6 +7,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 
+import java.math.BigDecimal;
 import java.sql.Blob;
 
 import java.util.Date;

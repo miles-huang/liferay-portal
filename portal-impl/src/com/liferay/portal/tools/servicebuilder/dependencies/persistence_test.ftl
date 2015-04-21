@@ -211,6 +211,8 @@ public class ${entity.name}PersistenceTest {
 					 new${column.methodName}Blob
 				<#elseif column.type == "String">
 					ServiceTestUtil.randomString()
+				<#elseif column.type == "BigDecimal">
+					ServiceTestUtil.randomBigDecimal("${packagePath}.model.${entity.name}","${column.name}")
 				</#if>
 
 				);
@@ -582,6 +584,8 @@ public class ${entity.name}PersistenceTest {
 					ServiceTestUtil.nextDate()
 				<#elseif column.type == "String">
 					ServiceTestUtil.randomString()
+				<#elseif column.type == "BigDecimal">
+					ServiceTestUtil.randomBigDecimal("${packagePath}.model.${entity.name}","${column.name}")
 				</#if>
 
 				);
@@ -827,6 +831,8 @@ public class ${entity.name}PersistenceTest {
 							ServiceTestUtil.nextDate()
 						<#elseif column.type == "String">
 							ServiceTestUtil.randomString()
+						<#elseif column.type == "BigDecimal">
+							ServiceTestUtil.randomBigDecimal("${packagePath}.model.${entity.name}","${column.name}")
 						</#if>
 
 						);

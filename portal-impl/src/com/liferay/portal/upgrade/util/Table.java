@@ -44,6 +44,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 
+import java.math.BigDecimal;
+
 import java.text.DateFormat;
 
 import java.util.Date;
@@ -419,6 +421,17 @@ public class Table {
 				value = StringPool.NULL;
 			}
 		}
+		else if (t == Types.DECIMAL || t == Types.NUMERIC ) {
+			try {
+				value = rs.getBigDecimal(name);
+			}
+			catch (Exception e) {
+			}
+
+			if (value == null) {
+				value = StringPool.NULL;
+			}
+		}
 		else if (t == Types.VARCHAR) {
 			value = GetterUtil.getString(rs.getString(name));
 		}
@@ -579,6 +592,14 @@ public class Table {
 
 				ps.setTimestamp(
 					paramIndex, new Timestamp(df.parse(value).getTime()));
+			}
+		}
+		else if (t == Types.NUMERIC || t == Types.DECIMAL ) {
+			if (StringPool.NULL.equals(value)) {
+				ps.setBigDecimal(paramIndex, null);
+			}
+			else {
+				ps.setBigDecimal(paramIndex, new BigDecimal(value));
 			}
 		}
 		else {

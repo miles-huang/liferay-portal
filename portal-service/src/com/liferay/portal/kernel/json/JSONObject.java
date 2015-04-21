@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.json;
 
 import java.io.Writer;
+import java.math.BigDecimal;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -24,6 +25,11 @@ import java.util.Iterator;
  */
 public interface JSONObject {
 
+	
+	public BigDecimal getBigDecimal(String key);
+	
+	public BigDecimal getBigDecimal(String key, BigDecimal defaultValue);
+	
 	public boolean getBoolean(String key);
 
 	public boolean getBoolean(String key, boolean defaultValue);
@@ -58,6 +64,8 @@ public interface JSONObject {
 
 	public JSONArray names();
 
+	public JSONObject put(String key, BigDecimal value);
+	
 	public JSONObject put(String key, boolean value);
 
 	public JSONObject put(String key, Date value);

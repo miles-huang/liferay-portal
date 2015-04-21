@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
@@ -41,6 +42,7 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.LayoutSetPrototype;
+import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
@@ -76,12 +78,14 @@ import com.liferay.portlet.usersadmin.util.OrganizationIndexer;
 import com.liferay.portlet.usersadmin.util.UserIndexer;
 import com.liferay.util.PwdGenerator;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -524,6 +528,17 @@ public class ServiceTestUtil {
 
 	public static String randomString() throws Exception {
 		return PwdGenerator.getPassword();
+	}
+
+	public static BigDecimal randomBigDecimal(String model, String field) throws Exception {
+		Map<String, String> hints = ModelHintsUtil.getHints(model, field);
+		int precision = 12;
+		int scale = 2;
+		if (hints != null) {
+			precision = GetterUtil.getInteger(hints.get("precision"),precision);
+			scale = GetterUtil.getInteger(hints.get("scale"),scale);
+		}
+		return new BigDecimal(_random.nextDouble()*Math.pow(10, precision-scale));
 	}
 
 	public static void setUser(User user) throws Exception {
