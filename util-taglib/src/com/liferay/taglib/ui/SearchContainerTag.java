@@ -123,6 +123,10 @@ public class SearchContainerTag<R> extends ParamAndPropertyAncestorTagImpl {
 				_searchContainer.setRowChecker(_rowChecker);
 			}
 
+			if (_emptyResultsMessage != null) {
+				_searchContainer.setEmptyResultsMessage(_emptyResultsMessage);
+			}
+			
 			pageContext.setAttribute(_var, _searchContainer);
 
 			return EVAL_BODY_INCLUDE;
