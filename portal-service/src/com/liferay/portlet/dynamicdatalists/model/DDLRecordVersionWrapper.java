@@ -644,6 +644,12 @@ public class DDLRecordVersionWrapper implements DDLRecordVersion,
 		return _ddlRecordVersion.getRecord();
 	}
 
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordSet getRecordSet()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _ddlRecordVersion.getRecordSet();
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
