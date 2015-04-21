@@ -25,9 +25,9 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MethodParameter;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.util.ClassLoaderUtil;
 
 import java.lang.reflect.Method;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -36,9 +36,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import jodd.bean.BeanUtil;
-
 import jodd.typeconverter.TypeConverterManager;
-
 import jodd.util.KeyValue;
 import jodd.util.ReflectUtil;
 
@@ -190,8 +188,14 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 		Class<?> actionClass = _jsonWebServiceActionConfig.getActionClass();
 
 		Object[] parameters = _prepareParameters(actionClass);
-
-		return actionMethod.invoke(actionClass, parameters);
+		
+		ClassLoader classLoader = ClassLoaderUtil.getContextClassLoader();
+		try {
+			ClassLoaderUtil.setContextClassLoader(actionClass.getClassLoader());
+			return actionMethod.invoke(actionClass, parameters);
+		} finally {
+			ClassLoaderUtil.setContextClassLoader(classLoader);
+		}
 	}
 
 	private Object[] _prepareParameters(Class<?> actionClass) throws Exception {
