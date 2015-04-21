@@ -57,7 +57,12 @@ public class DDMIndexerImpl implements DDMIndexer {
 			else if (value instanceof Integer) {
 				document.addKeyword(name, (Integer)value);
 			}
-			else {
+			else if ( field.getName().toLowerCase().endsWith("id")) {
+
+				String valueString = String.valueOf(value);
+				document.addKeyword(name, valueString);
+				
+			} else {
 				String valueString = String.valueOf(value);
 
 				document.addText(name, valueString);
