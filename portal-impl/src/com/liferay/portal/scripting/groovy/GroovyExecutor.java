@@ -123,6 +123,8 @@ public class GroovyExecutor extends BaseScriptingExecutor {
 					_groovyShells.put(aggregateClassLoader, groovyShell);
 				}
 			}
+		} else {
+			groovyShell = _groovyShells.get(aggregateClassLoader);
 		}
 
 		return groovyShell;
