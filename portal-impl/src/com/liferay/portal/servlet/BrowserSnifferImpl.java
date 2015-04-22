@@ -308,11 +308,11 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 
 	@Override
 	public boolean isWapXhtml(HttpServletRequest request) {
-		String accept = getAccept(request);
+//		String accept = getAccept(request);
 
-		if (accept.contains("wap.xhtml")) {
-			return true;
-		}
+//		if (accept.contains("wap.xhtml")) {
+//			return true;
+//		}
 
 		return false;
 	}
