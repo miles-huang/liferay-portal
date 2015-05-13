@@ -484,8 +484,7 @@ public class ShoppingUtil {
 			}
 		}
 
-		if ((preferences != null) &&
-			preferences.getTaxState().equals(stateId)) {
+		if ((preferences != null) ) {
 
 			double subtotal = 0.0;
 
