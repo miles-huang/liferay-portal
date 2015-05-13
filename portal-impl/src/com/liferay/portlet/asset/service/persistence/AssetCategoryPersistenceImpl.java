@@ -18,9 +18,14 @@ import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
+import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Query;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -34,6 +39,7 @@ import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -11444,6 +11450,13 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		return count.intValue();
 	}
 
+	public DynamicQuery createDynamicQuery() {
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(AssetCategory.class,
+				PortalClassLoaderUtil.getClassLoader());
+
+		return query;
+	}
+
 	/**
 	 * Returns all the asset entries associated with the asset category.
 	 *
@@ -11776,6 +11789,140 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public void setRebuildTreeEnabled(boolean rebuildTreeEnabled) {
 		this.rebuildTreeEnabled = rebuildTreeEnabled;
+	}
+
+	public DynamicQuery getDescendantsQuery(long categoryId,
+		boolean containsSelf, OrderByComparator obc)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = findByPrimaryKey(categoryId);
+		long groupId = assetCategory.getGroupId();
+		DynamicQuery query = createDynamicQuery();
+		query.add(PropertyFactoryUtil.forName("groupId").eq(groupId));
+
+		if (containsSelf) {
+			query.add(PropertyFactoryUtil.forName("leftCategoryId")
+										 .between(assetCategory.getLeftCategoryId(),
+					assetCategory.getRightCategoryId()));
+		}
+		else {
+			query.add(PropertyFactoryUtil.forName("leftCategoryId")
+										 .gt(assetCategory.getLeftCategoryId()));
+			query.add(PropertyFactoryUtil.forName("leftCategoryId")
+										 .lt(assetCategory.getRightCategoryId()));
+		}
+
+		if ((obc == null) || Validator.isNull(obc.getOrderBy())) {
+			query.addOrder(OrderFactoryUtil.asc("leftCategoryId"));
+		}
+		else {
+			String orderBy = obc.getOrderBy();
+			String[] parts = StringUtil.split(orderBy);
+
+			for (String part : parts) {
+				int y = part.indexOf(StringPool.SPACE);
+				boolean asc = true;
+				String fieldName = part;
+
+				if (y != -1) {
+					String orderPart = part.substring(y + 1, part.length())
+										   .toUpperCase();
+
+					if (orderPart.endsWith("DESC")) {
+						asc = false;
+					}
+
+					fieldName = part.substring(0, y);
+				}
+
+				query.addOrder(asc ? OrderFactoryUtil.asc(fieldName)
+								   : OrderFactoryUtil.desc(fieldName));
+			}
+		}
+
+		return query;
+	}
+
+	public DynamicQuery getDescendantIdsQuery(long categoryId,
+		boolean containsSelf, OrderByComparator obc)
+		throws NoSuchCategoryException, SystemException {
+		DynamicQuery query = getDescendantsQuery(categoryId, containsSelf, obc);
+		query.setProjection(ProjectionFactoryUtil.property("categoryId"));
+
+		return query;
+	}
+
+	public List<AssetCategory> findDescendants(long categoryId,
+		boolean containsSelf) throws NoSuchCategoryException, SystemException {
+		List<AssetCategory> ret = findDescendants(categoryId, containsSelf,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+
+		return ret;
+	}
+
+	public List<AssetCategory> findDescendants(long categoryId,
+		boolean containsSelf, int start, int end)
+		throws NoSuchCategoryException, SystemException {
+		List<AssetCategory> ret = findDescendants(categoryId, containsSelf,
+				start, end, null);
+
+		return ret;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<AssetCategory> findDescendants(long categoryId,
+		boolean containsSelf, int start, int end, OrderByComparator obc)
+		throws NoSuchCategoryException, SystemException {
+		DynamicQuery query = getDescendantsQuery(categoryId, containsSelf, obc);
+		List<?> ret;
+
+		if ((start == QueryUtil.ALL_POS) || (end == QueryUtil.ALL_POS)) {
+			ret = findWithDynamicQuery(query);
+		}
+		else {
+			ret = findWithDynamicQuery(query, start, end);
+		}
+
+		return (List<AssetCategory>)ret;
+	}
+
+	public List<Long> findDescendantIds(long categoryId, boolean containsSelf)
+		throws NoSuchCategoryException, SystemException {
+		return findDescendantIds(categoryId, containsSelf, null);
+	}
+
+	public List<Long> findDescendantIds(long categoryId, boolean containsSelf,
+		OrderByComparator obc) throws NoSuchCategoryException, SystemException {
+		DynamicQuery query = getDescendantIdsQuery(categoryId, containsSelf, obc);
+		List<?> ret = findWithDynamicQuery(query);
+
+		return (List<Long>)ret;
+	}
+
+	public int countDescendants(long categoryId)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = findByPrimaryKey(categoryId);
+
+		return (int)(assetCategory.getRightCategoryId() -
+		assetCategory.getLeftCategoryId() - 1) / 2;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<AssetCategory> findAncestors(long categoryId)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = findByPrimaryKey(categoryId);
+		long groupId = assetCategory.getGroupId();
+		DynamicQuery query = createDynamicQuery();
+		query.add(PropertyFactoryUtil.forName("groupId").eq(groupId));
+		query.add(PropertyFactoryUtil.forName("leftCategoryId")
+									 .lt(assetCategory.getLeftCategoryId()));
+		query.add(PropertyFactoryUtil.forName("rightCategoryId")
+									 .gt(assetCategory.getRightCategoryId()));
+		query.addOrder(OrderFactoryUtil.asc("leftCategoryId"));
+
+		@SuppressWarnings("rawtypes")
+		List ret = findWithDynamicQuery(query);
+
+		return ret;
 	}
 
 	protected long countOrphanTreeNodes(long groupId) throws SystemException {
