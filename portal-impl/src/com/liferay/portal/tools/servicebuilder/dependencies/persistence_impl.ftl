@@ -1,5 +1,7 @@
 <#if entity.isHierarchicalTree()>
-	<#if entity.hasColumn("groupId")>
+	<#if entity.hasColumn("treeScopeId")>
+		<#assign scopeColumn = entity.getColumn("treeScopeId")>
+	<#elseif entity.hasColumn("groupId")>
 		<#assign scopeColumn = entity.getColumn("groupId")>
 	<#else>
 		<#assign scopeColumn = entity.getColumn("companyId")>
@@ -12,6 +14,16 @@
 
 package ${packagePath}.service.persistence;
 
+<#if entity.isHierarchicalTree() >
+import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+<#if entity.hasColumn("treeScopeId") >
+import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.NoSuchParentTreeEntityException;
+import com.liferay.portal.kernel.exception.TreeScopeIdImmutableException;
+</#if>
+</#if>
 <#assign noSuchEntity = serviceBuilder.getNoSuchEntityException(entity)>
 
 import ${packagePath}.${noSuchEntity}Exception;
@@ -27,6 +39,8 @@ import com.liferay.portal.kernel.dao.jdbc.MappingSqlQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.jdbc.RowMapper;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -48,6 +62,9 @@ import com.liferay.portal.kernel.util.CalendarUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
+<#if pluginName == "">
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+</#if>
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -568,10 +585,26 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					session.flush();
 
 					if (isNew) {
+				<#if entity.hasColumn("treeScopeId")>
+						if ( ${entity.varName}.getParent${pkColumn.methodName}() == 0 ) {
+							${entity.varName}.setTreeScopeId(CounterLocalServiceUtil.increment());
+						} else {
+							${entity.name} parent = this.fetchByPrimaryKey(${entity.varName}.getParent${pkColumn.methodName}());
+							if ( parent == null ) {
+								throw new NoSuchParentTreeEntityException();
+							}
+							${entity.varName}.setTreeScopeId(parent.getTreeScopeId());
+						}
+				</#if>
 						expandTree(${entity.varName}, null);
 					}
 					else {
 						if (${entity.varName}.getParent${pkColumn.methodName}() != ${entity.varName}ModelImpl.getOriginalParent${pkColumn.methodName}()) {
+				<#if entity.hasColumn("treeScopeId")>
+							if (${entity.varName}.getTreeScopeId() != ${entity.varName}ModelImpl.getOriginalTreeScopeId() ) {
+								throw new TreeScopeIdImmutableException();
+							}
+				</#if>
 							List<Long> children${pkColumn.methodNames} = getChildrenTree${pkColumn.methodNames}(${entity.varName});
 
 							shrinkTree(${entity.varName});
@@ -990,7 +1023,18 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 		return count.intValue();
 	}
-
+	<#if entity.isHierarchicalTree()>
+	public DynamicQuery createDynamicQuery() {
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(${entity.name}.class,<#rt>
+		<#if pluginName != "">
+			this.getClass()<#t>
+		<#else>
+			PortalClassLoaderUtil<#t>
+		</#if>
+		.getClassLoader());<#lt>
+		return query;
+	}
+	</#if>
 	<#list entity.columnList as column>
 		<#if column.isCollection() && column.isMappingManyToMany()>
 			<#assign tempEntity = serviceBuilder.getEntity(column.getEJBName())>
@@ -1306,6 +1350,96 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			this.rebuildTreeEnabled = rebuildTreeEnabled;
 		}
 
+		public DynamicQuery getDescendantsQuery(${entity.PKClassName} ${entity.PKVarName}, boolean containsSelf, OrderByComparator obc) throws ${noSuchEntity}Exception, SystemException {
+			${entity.name} ${entity.varName} = findByPrimaryKey(${entity.PKVarName});
+			long ${scopeColumn.name} = ${entity.varName}.get${scopeColumn.methodName}();
+			DynamicQuery query = createDynamicQuery();
+			query.add(PropertyFactoryUtil.forName("${scopeColumn.name}").eq(${scopeColumn.name}));
+			if ( containsSelf ) {
+				query.add(PropertyFactoryUtil.forName("left${pkColumn.methodName}").between(${entity.varName}.getLeft${pkColumn.methodName}(), ${entity.varName}.getRight${pkColumn.methodName}()));
+			} else {
+				query.add(PropertyFactoryUtil.forName("left${pkColumn.methodName}").gt(${entity.varName}.getLeft${pkColumn.methodName}()));
+				query.add(PropertyFactoryUtil.forName("left${pkColumn.methodName}").lt(${entity.varName}.getRight${pkColumn.methodName}()));
+			}
+			if ( obc == null || Validator.isNull(obc.getOrderBy())) {
+				query.addOrder(OrderFactoryUtil.asc("left${pkColumn.methodName}"));
+			} else {
+				String orderBy = obc.getOrderBy();
+				String[] parts = StringUtil.split(orderBy);
+				for (String part : parts) {
+					int y = part.indexOf(StringPool.SPACE);
+					boolean asc = true;
+					String fieldName = part;
+					if ( y != -1 ) {
+						String orderPart = part.substring(y+1, part.length()).toUpperCase();
+						if ( orderPart.endsWith("DESC")) {
+							asc = false;
+						}
+						fieldName = part.substring(0, y);
+					}
+					query.addOrder(asc?OrderFactoryUtil.asc(fieldName):OrderFactoryUtil.desc(fieldName));
+				}
+			}
+			return query;
+		}
+	
+		public DynamicQuery getDescendantIdsQuery(${entity.PKClassName} ${entity.PKVarName}, boolean containsSelf, OrderByComparator obc) throws ${noSuchEntity}Exception, SystemException {
+			DynamicQuery query = getDescendantsQuery(${entity.PKVarName}, containsSelf, obc);
+			query.setProjection(ProjectionFactoryUtil.property("${entity.PKVarName}"));
+			return query;
+		}
+	
+		public List<${entity.name}> findDescendants(${entity.PKClassName} ${entity.PKVarName}, boolean containsSelf) throws ${noSuchEntity}Exception, SystemException {
+			List<${entity.name}> ret = findDescendants(${entity.PKVarName}, containsSelf, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+			return ret;
+		}
+	
+		public List<${entity.name}> findDescendants(${entity.PKClassName} ${entity.PKVarName}, boolean containsSelf, int start, int end) throws ${noSuchEntity}Exception, SystemException {
+			List<${entity.name}> ret = findDescendants(${entity.PKVarName}, containsSelf, start, end, null);
+			return ret;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public List<${entity.name}> findDescendants(${entity.PKClassName} ${entity.PKVarName}, boolean containsSelf, int start, int end, OrderByComparator obc) throws ${noSuchEntity}Exception, SystemException {
+			DynamicQuery query = getDescendantsQuery(${entity.PKVarName}, containsSelf, obc);
+			List<?> ret;
+			if ( start == QueryUtil.ALL_POS || end == QueryUtil.ALL_POS ) {
+				ret = findWithDynamicQuery(query);
+			} else {
+				ret = findWithDynamicQuery(query, start, end);
+			}
+			return (List<${entity.name}>)ret;
+		}
+
+		public List<${serviceBuilder.getPrimitiveObj("${entity.PKClassName}")}> findDescendantIds(${entity.PKClassName} ${entity.PKVarName}, boolean containsSelf) throws ${noSuchEntity}Exception, SystemException {
+			return findDescendantIds(${entity.PKVarName}, containsSelf, null);
+		}
+
+		public List<${serviceBuilder.getPrimitiveObj("${entity.PKClassName}")}> findDescendantIds(${entity.PKClassName} ${entity.PKVarName}, boolean containsSelf, OrderByComparator obc) throws ${noSuchEntity}Exception, SystemException {
+			DynamicQuery query = getDescendantIdsQuery(${entity.PKVarName}, containsSelf, obc);
+			List<?> ret = findWithDynamicQuery(query);
+			return (List<${serviceBuilder.getPrimitiveObj("${entity.PKClassName}")}>)ret;
+		}
+
+		public int countDescendants(${entity.PKClassName} ${entity.PKVarName}) throws ${noSuchEntity}Exception, SystemException {
+			${entity.name} ${entity.varName} = findByPrimaryKey(${entity.PKVarName});
+			return (int)(${entity.varName}.getRight${pkColumn.methodName}()-${entity.varName}.getLeft${pkColumn.methodName}()-1)/2;
+		}
+	
+		@SuppressWarnings("unchecked")
+		public List<${entity.name}> findAncestors(${entity.PKClassName} ${entity.PKVarName}) throws ${noSuchEntity}Exception, SystemException {
+			${entity.name} ${entity.varName} = findByPrimaryKey(${entity.PKVarName});
+			long ${scopeColumn.name} = ${entity.varName}.get${scopeColumn.methodName}();
+			DynamicQuery query = createDynamicQuery();
+			query.add(PropertyFactoryUtil.forName("${scopeColumn.name}").eq(${scopeColumn.name}));
+			query.add(PropertyFactoryUtil.forName("left${pkColumn.methodName}").lt(${entity.varName}.getLeft${pkColumn.methodName}()));
+			query.add(PropertyFactoryUtil.forName("right${pkColumn.methodName}").gt(${entity.varName}.getRight${pkColumn.methodName}()));
+			query.addOrder(OrderFactoryUtil.asc("left${pkColumn.methodName}"));
+			@SuppressWarnings("rawtypes")
+			List ret = findWithDynamicQuery(query);
+			return ret;
+		}
+	
 		protected long countOrphanTreeNodes(long ${scopeColumn.name}) throws SystemException {
 			Session session = null;
 
