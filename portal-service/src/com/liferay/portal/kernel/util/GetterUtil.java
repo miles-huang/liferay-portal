@@ -15,7 +15,6 @@
 package com.liferay.portal.kernel.util;
 
 import java.math.BigDecimal;
-
 import java.text.DateFormat;
 
 import java.util.Date;
@@ -26,6 +25,10 @@ import java.util.Date;
 public class GetterUtil {
 
 	public static final String[] BOOLEANS = {"true", "t", "y", "on", "1"};
+
+	public static final BigDecimal DEFAULT_BIG_DECIMAL = BigDecimal.ZERO;
+
+	public static final BigDecimal[] DEFAULT_BIG_DECIMAL_VALUES = new BigDecimal[0];
 
 	public static final boolean DEFAULT_BOOLEAN = false;
 
@@ -66,6 +69,28 @@ public class GetterUtil {
 	public static final String DEFAULT_STRING = StringPool.BLANK;
 
 	public static final String[] DEFAULT_STRING_VALUES = new String[0];
+
+	public static BigDecimal get(Object value, BigDecimal defaultValue) {
+		if (value == null) {
+			return defaultValue;
+		}
+
+		if (value instanceof String) {
+			return get((String)value, defaultValue);
+		}
+
+		Class<?> clazz = value.getClass();
+
+		if (BigDecimal.class.isAssignableFrom(clazz)) {
+			return (BigDecimal)value;
+		}
+
+		if (Number.class.isAssignableFrom(clazz)) {
+			return get(value.toString(), defaultValue);
+		}
+		
+		return defaultValue;
+	}
 
 	public static boolean get(Object value, boolean defaultValue) {
 		if (value == null) {
@@ -285,6 +310,16 @@ public class GetterUtil {
 		return defaultValue;
 	}
 
+	public static BigDecimal get(String value, BigDecimal defaultValue) {
+		try {
+			return new BigDecimal(value.trim());
+		}
+		catch (Exception e) {
+		}
+
+		return defaultValue;
+	}
+
 	public static boolean get(String value, boolean defaultValue) {
 		if (value == null) {
 			return defaultValue;
@@ -390,6 +425,72 @@ public class GetterUtil {
 		return value;
 	}
 
+	public static BigDecimal getBigDecimal(Object value) {
+		return getBigDecimal(value, DEFAULT_BIG_DECIMAL);
+	}
+
+	public static BigDecimal getBigDecimal(Object value, BigDecimal defaultValue) {
+		return get(value, defaultValue);
+	}
+
+	public static BigDecimal getBigDecimal(String value) {
+		return getBigDecimal(value, DEFAULT_BIG_DECIMAL);
+	}
+
+	public static BigDecimal getBigDecimal(String value, BigDecimal defaultValue) {
+		return get(value, defaultValue);
+	}
+
+	public static BigDecimal[] getBigDecimalValues(Object value) {
+		return getBigDecimalValues(value, DEFAULT_BIG_DECIMAL_VALUES);
+	}
+
+	public static BigDecimal[] getBigDecimalValues(
+		Object value, BigDecimal[] defaultValue) {
+
+		Class<?> clazz = value.getClass();
+
+		if (clazz.isArray()) {
+			Class<?> componentType = clazz.getComponentType();
+			if (componentType.isAssignableFrom(String.class)) {
+				return getBigDecimalValues((String[])value, defaultValue);
+			}
+			else if (BigDecimal.class.isAssignableFrom(componentType)) {
+				return (BigDecimal[])value;
+			}
+			else if (Number.class.isAssignableFrom(componentType)) {
+				Number[]values = (Number[])value;
+				BigDecimal[] ret = new BigDecimal[values.length];
+				for ( int i = 0; i < values.length; i++) {
+					ret[i] = getBigDecimal(values[i]);
+				}
+				return ret;
+			}
+		}
+
+		return defaultValue;
+	}
+
+	public static BigDecimal[] getBigDecimalValues(String[] values) {
+		return getBigDecimalValues(values, DEFAULT_BIG_DECIMAL_VALUES);
+	}
+
+	public static BigDecimal[] getBigDecimalValues(
+		String[] values, BigDecimal[] defaultValue) {
+
+		if (values == null) {
+			return defaultValue;
+		}
+
+		BigDecimal[] bigDecimalValues = new BigDecimal[values.length];
+
+		for (int i = 0; i < values.length; i++) {
+			bigDecimalValues[i] = getBigDecimal(values[i]);
+		}
+
+		return bigDecimalValues;
+	}
+	
 	public static boolean getBoolean(Object value) {
 		return getBoolean(value, DEFAULT_BOOLEAN);
 	}

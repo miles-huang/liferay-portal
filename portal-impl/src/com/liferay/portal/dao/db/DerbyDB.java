@@ -148,7 +148,7 @@ public class DerbyDB extends BaseDB {
 	private static final String[] _DERBY = {
 		"--", "1", "0", "'1970-01-01-00.00.00.000000'", "current timestamp",
 		" blob", " blob", " smallint", " timestamp", " double", " integer",
-		" bigint", " varchar(4000)", " clob", " varchar",
+		" bigint", " varchar(4000)", " clob", " varchar", " decimal",
 		" generated always as identity", "commit"
 	};
 

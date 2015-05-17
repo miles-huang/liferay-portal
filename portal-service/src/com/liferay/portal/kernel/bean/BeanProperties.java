@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.bean;
 
+import java.math.BigDecimal;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -28,6 +30,10 @@ public interface BeanProperties {
 	public void copyProperties(
 		Object source, Object target, String[] ignoreProperties);
 
+	public BigDecimal getBigDecimal(Object bean, String param);
+	
+	public BigDecimal getBigDecimal(Object bean, String param, BigDecimal defaultValue);
+	
 	public boolean getBoolean(Object bean, String param);
 
 	public boolean getBoolean(Object bean, String param, boolean defaultValue);

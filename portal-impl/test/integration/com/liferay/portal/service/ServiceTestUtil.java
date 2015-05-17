@@ -30,9 +30,11 @@ import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
@@ -54,6 +56,7 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.RoleTestUtil;
 import com.liferay.portal.util.TestPropsValues;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -341,6 +344,17 @@ public class ServiceTestUtil {
 
 	public static long nextLong() throws Exception {
 		return CounterLocalServiceUtil.increment();
+	}
+
+	public static BigDecimal randomBigDecimal(String model, String field) throws Exception {
+		Map<String, String> hints = ModelHintsUtil.getHints(model, field);
+		int precision = 12;
+		int scale = 2;
+		if (hints != null) {
+			precision = GetterUtil.getInteger(hints.get("precision"),precision);
+			scale = GetterUtil.getInteger(hints.get("scale"),scale);
+		}
+		return new BigDecimal(_random.nextDouble()*Math.pow(10, precision-scale));
 	}
 
 	public static boolean randomBoolean() throws Exception {
