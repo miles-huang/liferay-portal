@@ -23,14 +23,18 @@
 	<c:if test="<%= !themeDisplay.isSignedIn() || Validator.isNull(autoRememberMe) %>">
 
 		<%
-		int sessionTimeout = PropsValues.SESSION_TIMEOUT;
-		int sessionTimeoutMinute = sessionTimeout * (int)Time.MINUTE;
-		int sessionTimeoutWarning = PropsValues.SESSION_TIMEOUT_WARNING;
-
-		boolean sessionRedirectOnExpire = PropsValues.SESSION_TIMEOUT_REDIRECT_ON_EXPIRE;
-		String sessionRedirectUrl = themeDisplay.getURLHome();
-
 		long companyId = themeDisplay.getCompanyId();
+
+		int sessionTimeout = PrefsPropsUtil.getInteger(companyId,PropsKeys.SESSION_TIMEOUT, PropsValues.SESSION_TIMEOUT);
+		int sessionTimeoutMinute = sessionTimeout * (int)Time.MINUTE;
+		int sessionTimeoutWarning = PrefsPropsUtil.getInteger(companyId, PropsKeys.SESSION_TIMEOUT_WARNING, PropsValues.SESSION_TIMEOUT_WARNING);
+		boolean sessionTimeoutAutoExtend = PrefsPropsUtil.getBoolean(companyId, PropsKeys.SESSION_TIMEOUT_AUTO_EXTEND,
+				PropsValues.SESSION_TIMEOUT_AUTO_EXTEND);
+
+		boolean sessionRedirectOnExpire = PrefsPropsUtil.getBoolean(companyId, PropsKeys.SESSION_TIMEOUT_REDIRECT_ON_EXPIRE,
+				PropsValues.SESSION_TIMEOUT_REDIRECT_ON_EXPIRE);
+		
+		String sessionRedirectUrl = themeDisplay.getURLHome();
 
 		if (PrefsPropsUtil.getBoolean(companyId, PropsKeys.CAS_AUTH_ENABLED, PropsValues.CAS_AUTH_ENABLED) && PropsValues.CAS_LOGOUT_ON_SESSION_EXPIRATION) {
 			sessionRedirectOnExpire = true;
@@ -49,7 +53,7 @@
 		<aui:script use="liferay-session">
 			Liferay.Session = new Liferay.SessionBase(
 				{
-					autoExtend: <%= !themeDisplay.isSignedIn() || PropsValues.SESSION_TIMEOUT_AUTO_EXTEND %>,
+					autoExtend: <%= !themeDisplay.isSignedIn() || sessionTimeoutAutoExtend %>,
 					sessionLength: <%= sessionTimeout %>,
 					redirectOnExpire: <%= sessionRedirectOnExpire %>,
 					redirectUrl: '<%= HtmlUtil.escapeJS(sessionRedirectUrl) %>',
