@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.util;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.memory.EqualityWeakReference;
 
 import java.io.IOException;
 
@@ -71,7 +72,7 @@ public class AggregateClassLoader extends ClassLoader {
 	}
 
 	public AggregateClassLoader(ClassLoader classLoader) {
-		_parentClassLoaderReference = new WeakReference<ClassLoader>(
+		_parentClassLoaderReference = new EqualityWeakReference<ClassLoader>(
 			classLoader);
 	}
 
@@ -96,7 +97,7 @@ public class AggregateClassLoader extends ClassLoader {
 		}
 		else {
 			_classLoaderReferences.add(
-				new WeakReference<ClassLoader>(classLoader));
+				new EqualityWeakReference<ClassLoader>(classLoader));
 		}
 	}
 
