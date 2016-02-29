@@ -844,7 +844,7 @@
 					var y = action.indexOf('&', x);
 
 					if (y < 0) {
-						y = action.length();
+						y = action.length;
 					}
 
 					var authToken = action.substring(x + 8, y);
