@@ -16,6 +16,8 @@ package com.liferay.portal.kernel.bean;
 
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
+import java.math.BigDecimal;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -45,6 +47,24 @@ public class BeanPropertiesUtil {
 		return _beanProperties;
 	}
 
+	public static BigDecimal getBigDecimal(Object bean, String param) {
+		return getBeanProperties().getBigDecimal(bean, param);
+	}
+	
+	public static BigDecimal getBigDecimal(Object bean, String param,
+			BigDecimal defaultValue) {
+		return getBeanProperties().getBigDecimal(bean, param, defaultValue);
+	}
+
+	public static BigDecimal getBigDecimalSilent(Object bean, String param) {
+		return getBeanProperties().getBigDecimalSilent(bean, param);
+	}
+	
+	public static BigDecimal getBigDecimalSilent(Object bean, String param,
+			BigDecimal defaultValue) {
+		return getBeanProperties().getBigDecimalSilent(bean, param, defaultValue);
+	}
+		
 	public static boolean getBoolean(Object bean, String param) {
 		return getBeanProperties().getBoolean(bean, param);
 	}

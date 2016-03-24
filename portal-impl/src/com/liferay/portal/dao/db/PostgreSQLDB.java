@@ -205,7 +205,7 @@ public class PostgreSQLDB extends BaseDB {
 	private static final String[] _POSTGRESQL = {
 		"--", "true", "false", "'01/01/1970'", "current_timestamp", " oid",
 		" bytea", " bool", " timestamp", " double precision", " integer",
-		" bigint", " text", " text", " varchar", "", "commit"
+		" bigint", " text", " text", " varchar", " decimal", "", "commit"
 	};
 
 	private static final boolean _SUPPORTS_QUERYING_AFTER_EXCEPTION = false;
