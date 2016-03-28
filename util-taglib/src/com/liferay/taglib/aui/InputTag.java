@@ -15,6 +15,7 @@
 package com.liferay.taglib.aui;
 
 import com.liferay.portal.kernel.servlet.taglib.aui.ValidatorTag;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -282,7 +283,10 @@ public class InputTag extends BaseInputTag {
 		if (fieldWrapper != null) {
 			wrappedField = true;
 		}
-
+		wrappedField = wrappedField 
+				|| GetterUtil.getBoolean(getDynamicAttributes().get("wrappedField"), false);
+//		getDynamicAttributes().remove("wrappedField");
+		
 		setNamespacedAttribute(request, "baseType", baseType);
 		setNamespacedAttribute(request, "bean", bean);
 		setNamespacedAttribute(request, "defaultLanguageId", defaultLanguageId);
