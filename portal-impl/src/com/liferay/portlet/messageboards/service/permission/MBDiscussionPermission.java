@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.staging.permission.StagingPermissionUtil;
 import com.liferay.portal.kernel.workflow.permission.WorkflowPermissionUtil;
 import com.liferay.portal.security.auth.PrincipalException;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
 import com.liferay.portal.util.PortletKeys;
@@ -114,7 +115,8 @@ public class MBDiscussionPermission {
 			className);
 
 		if (!resourceActions.contains(actionId)) {
-			return true;
+			return !ActionKeys.UPDATE_DISCUSSION.equals(actionId)
+					&& !ActionKeys.DELETE_DISCUSSION.equals(actionId);
 		}
 
 		if ((ownerId > 0) &&
