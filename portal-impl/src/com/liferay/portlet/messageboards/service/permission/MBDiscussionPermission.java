@@ -115,8 +115,17 @@ public class MBDiscussionPermission {
 			className);
 
 		if (!resourceActions.contains(actionId)) {
-			return !ActionKeys.UPDATE_DISCUSSION.equals(actionId)
-					&& !ActionKeys.DELETE_DISCUSSION.equals(actionId);
+			if ( permissionChecker.isCompanyAdmin()
+					|| permissionChecker.isGroupAdmin(groupId)
+					|| permissionChecker.isGroupOwner(groupId)) return true;
+			if (ActionKeys.UPDATE_DISCUSSION.equals(actionId)
+					|| ActionKeys.DELETE_DISCUSSION.equals(actionId)) {
+				return false;
+			}
+			if (ActionKeys.ADD_DISCUSSION.equals(actionId)) {
+				return permissionChecker.isSignedIn();
+			}
+			return true;
 		}
 
 		if ((ownerId > 0) &&
