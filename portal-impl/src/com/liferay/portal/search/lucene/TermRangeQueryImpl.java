@@ -16,6 +16,7 @@ package com.liferay.portal.search.lucene;
 
 import com.liferay.portal.kernel.search.BaseQueryImpl;
 import com.liferay.portal.kernel.search.TermRangeQuery;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Raymond Augé
@@ -26,28 +27,40 @@ public class TermRangeQueryImpl extends BaseQueryImpl
 	public TermRangeQueryImpl(
 		String field, String lowerTerm, String upperTerm, boolean includesLower,
 		boolean includesUpper) {
-
-		_termRangeQuery = new org.apache.lucene.search.TermRangeQuery(
-			field, lowerTerm, upperTerm, includesLower, includesUpper);
+		if ( field.endsWith("_Number_sortable")) {
+			Double min = Validator.isNull(lowerTerm)?null:Double.parseDouble(lowerTerm);
+			Double max = Validator.isNull(upperTerm)?null:Double.parseDouble(upperTerm);
+			_numericRangeQuery = org.apache.lucene.search.NumericRangeQuery.newDoubleRange(
+					field, min, max, includesLower, includesUpper);
+		} else {
+			_termRangeQuery = new org.apache.lucene.search.TermRangeQuery(
+				field, lowerTerm, upperTerm, includesLower, includesUpper);
+		}
 	}
 
 	@Override
 	public String getField() {
-		return _termRangeQuery.getField();
+		return _termRangeQuery == null?
+				_numericRangeQuery.getField()
+				:_termRangeQuery.getField();
 	}
 
 	@Override
 	public String getLowerTerm() {
-		return _termRangeQuery.getLowerTerm();
+		return _termRangeQuery == null?
+				(_numericRangeQuery.getMin()==null?null:_numericRangeQuery.getMin().toString())
+				:_termRangeQuery.getLowerTerm();
 	}
 
 	public Object getTermRangeQuery() {
-		return _termRangeQuery;
+		return _termRangeQuery == null?_numericRangeQuery: _termRangeQuery;
 	}
 
 	@Override
 	public String getUpperTerm() {
-		return _termRangeQuery.getUpperTerm();
+		return _termRangeQuery == null?
+				(_numericRangeQuery.getMax()==null?null:_numericRangeQuery.getMax().toString())
+				:_termRangeQuery.getUpperTerm();
 	}
 
 	@Override
@@ -57,19 +70,23 @@ public class TermRangeQueryImpl extends BaseQueryImpl
 
 	@Override
 	public boolean includesLower() {
-		return _termRangeQuery.includesLower();
+		return _termRangeQuery == null?
+				_numericRangeQuery.includesMin():
+				_termRangeQuery.includesLower();
 	}
 
 	@Override
 	public boolean includesUpper() {
-		return _termRangeQuery.includesUpper();
+		return _termRangeQuery == null?
+				_numericRangeQuery.includesMax():
+				_termRangeQuery.includesUpper();
 	}
 
 	@Override
 	public String toString() {
-		return _termRangeQuery.toString();
+		return _termRangeQuery == null? _numericRangeQuery.toString():_termRangeQuery.toString();
 	}
 
 	private org.apache.lucene.search.TermRangeQuery _termRangeQuery;
-
+	private org.apache.lucene.search.NumericRangeQuery<Double> _numericRangeQuery;
 }
